@@ -45,13 +45,13 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   
   // Update the camera direction when moving the cursor
   listener.onMouseMove((point, dir) => {
-    const [vx, vy] = [dir[0], -dir[1]];
+    const [vx, vy] = [dir[0], dir[1]];
     // vector = 0*Rd + vx*e1 + vy*e2
     const e1 = normalize(crossProduct(cameraDir, [0, 0, 1]));
     const e2 = crossProduct(cameraDir, e1);
 
     // cameraDir = cameraDir + k * (vx * e1 + vy * e2)
-    const k = 2; // Camera sensibility
+    const k = 1; // Camera sensibility
     cameraDir = normalize([
       cameraDir[0] + k * (vx * e1[0] + vy * e2[0]),
       cameraDir[1] + k * (vx * e1[1] + vy * e2[1]),

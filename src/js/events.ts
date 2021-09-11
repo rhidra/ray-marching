@@ -1,8 +1,8 @@
 import {Vector2} from '../utils/type';
 
 export class MouseListener {
-  isMouseDown = false;
   prevDir: Vector2 | null = null;
+  isLocked = false;
   canvas;
 
   mouseDragCb: (point: Vector2, force: Vector2) => void;
@@ -12,116 +12,45 @@ export class MouseListener {
   constructor() {
     this.canvas = document.querySelector<HTMLCanvasElement>("#c");
 
-    // Configure event listeners
+    this.canvas.requestPointerLock = this.canvas.requestPointerLock || (this.canvas as any).mozRequestPointerLock;
 
-    // Mouse down
-    document.addEventListener('touchstart', e => {
-      // e.preventDefault();
-      this.handleMouseDown(e.touches[0].clientX, e.touches[0].clientY);
-    });
-    document.addEventListener('mousedown', e => this.handleMouseDown(e.clientX, e.clientY));
-  
-    // Mouse up
-    document.addEventListener('touchend', e => {
-      // e.preventDefault();
-      this.handleMouseUp();
-    });
-    document.addEventListener('mouseup', () => this.handleMouseUp());
+    document.exitPointerLock = document.exitPointerLock || (document as any).mozExitPointerLock;
+
+    this.canvas.onclick = () => {
+      this.canvas.requestPointerLock();
+    };
     
-    // Mouse move
-    document.addEventListener('touchmove', e => {
-      // e.preventDefault();
-      this.handleMouseMove(e.touches[0].clientX, e.touches[0].clientY);
-    });
-    document.addEventListener('mousemove', e => this.handleMouseMove(e.clientX, e.clientY));
+    // Event listener for lock cursor
+    document.addEventListener('pointerlockchange', () => this.handleLockChange(), false);
+    document.addEventListener('mozpointerlockchange', () => this.handleLockChange(), false);
 
-    if (false) {
-      const startTime = Date.now() / 1000;
-      let lastTime = 0;
-      setInterval(() => {
-        const now = Date.now() / 1000 - startTime;
-        const dt = now - lastTime;
-        this.step(now, dt);
-        lastTime = now;
-      }, 1000/30);
+    // Configure event listeners for mouse movements
+    document.addEventListener("mousemove", e => this.handleMouseMove(e), false);
+    document.addEventListener("touchmove", e => this.handleMouseMove(e as any), false);
+  }
+
+  handleLockChange() {
+    if (document.pointerLockElement === this.canvas || (document as any).mozPointerLockElement === this.canvas) {
+      this.isLocked = true;
+    } else {
+      this.isLocked = false;
     }
   }
 
-  handleMouseDown(clientX: number, clientY: number) {
-    this.isMouseDown = true
-    const rect = this.canvas.getBoundingClientRect();
-    const x = clientX / rect.width;
-    const y = clientY / rect.height;
-    this.prevDir = [x, y];
-  }
-
-  handleMouseUp() {
-    this.isMouseDown = false;
-    this.prevDir = null;
-    if (this.dragStopCb) {
-      this.dragStopCb();
-    }
-  }
-
-  handleMouseMove(clientX: number, clientY: number) {
-    if (!this.isMouseDown && !this.mouseMoveCb) {
+  handleMouseMove(e: MouseEvent) {
+    if (!this.mouseMoveCb || !this.isLocked) {
       return;
     }
 
-    const rect = this.canvas.getBoundingClientRect();
-    const x = clientX / rect.width * (rect.width/rect.height);
-    const y = 1. - clientY / rect.height;
+    const k = 500;
+    const dx = e.movementX / k;
+    const dy = e.movementY / k;
 
-    if (!this.prevDir) {
-      this.prevDir = [x, y];
-      return;
-    }
-
-    const dir: Vector2 = [x - this.prevDir[0], y - this.prevDir[1]];
-
-    this.prevDir = [x, y];
-    
-    if (this.isMouseDown && this.mouseDragCb) {
-      this.mouseDragCb([x, y], dir);
-    }
-
-    if (this.mouseMoveCb) {
-      this.mouseMoveCb([x, y], dir);
-    }
-  }
-
-  onMouseDrag(fn: (point: Vector2, force: Vector2) => void) {
-    this.mouseDragCb = fn;
-  }
-
-  onMouseDragStop(fn: () => void) {
-    this.dragStopCb = fn;
+    this.mouseMoveCb(undefined, [dx, dy]);
   }
 
   onMouseMove(fn: (point: Vector2, force: Vector2) => void) {
     this.mouseMoveCb = fn;
-  }
-
-  step(time: number, dt: number) {
-    if (time < 3) {
-      this.dragStopCb();
-    }
-    const {width, height} = this.canvas.getBoundingClientRect();
-    
-    const t = time - 3;
-    const radius = .25;
-    const f = 1/5;
-    const cx = .5;
-    const cy = .5;
-    const force = .05;
-
-    const theta = t * 2 * Math.PI * f;
-
-    const pt: Vector2 = [cx + radius * Math.cos(theta), cy + radius * Math.sin(theta)];
-    const dpt: Vector2 = [- force * Math.sin(theta), force * Math.cos(theta)];
-
-    pt[0] *= width / height;
-    this.mouseDragCb(pt, dpt);
   }
 }
 
