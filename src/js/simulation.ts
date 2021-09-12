@@ -66,19 +66,18 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     
     // Direction
     const [vx, vy] = velMouse;
-    cameraDir = vec3.normalize([
-      cameraDir[0] + camSensitivity * (vx * e1[0] + vy * e2[0]),
-      cameraDir[1] + camSensitivity * (vx * e1[1] + vy * e2[1]),
-      cameraDir[2] + camSensitivity * (vx * e1[2] + vy * e2[2]),
-    ]);
+    // cameraDir = normalize(cameraDir + camSensivity * (vx * e1 + vy * e2))
+    cameraDir = vec3.normalize(vec3.add(vec3.add(cameraDir, vec3.scale(vx * camSensitivity, e1)), vec3.scale(vy * camSensitivity, e2)));
     
     // Position
     const camVel = vec3.normalize(listener.moveDirection);
-    cameraPos = [
-      cameraPos[0] + camSpeed * (camVel[0] * cameraDir[0] - camVel[1] * e1[0] + camVel[2] * e2[0]),
-      cameraPos[1] + camSpeed * (camVel[0] * cameraDir[1] - camVel[1] * e1[1] + camVel[2] * e2[1]),
-      cameraPos[2] + camSpeed * (camVel[0] * cameraDir[2] - camVel[1] * e1[2] + camVel[2] * e2[2])
-    ];
+    // cameraPos = cameraPos + camSpeed * (camVel[0] * cameraDir - camVel[1] * e1 + camVel * e2)
+    const v = vec3.add(vec3.add(
+      vec3.scale(camVel[0], cameraDir),
+      vec3.scale(- camVel[1], e1)),
+      vec3.scale(camVel[2], e2)
+    );
+    cameraPos = vec3.add(cameraPos, vec3.scale(camSpeed, v));
 
     // Resize canvas and textures
     if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {

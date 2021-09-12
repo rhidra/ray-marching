@@ -16,7 +16,7 @@ export class vec3 {
       return [0, 0, 0];
     }
     
-    return vec3.scale(a, 1/n);
+    return vec3.scale(1/n, a);
   }
 
   static norm(a: Vector3): number {
@@ -27,7 +27,7 @@ export class vec3 {
     return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
   }
 
-  static scale(a: Vector3, s: number): Vector3 {
+  static scale(s: number, a: Vector3): Vector3 {
     return [a[0] * s, a[1] * s, a[2] * s];
   }
 
