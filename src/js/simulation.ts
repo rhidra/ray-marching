@@ -70,8 +70,8 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     cameraDir = vec3.normalize(vec3.add(vec3.add(cameraDir, vec3.scale(vx * camSensitivity, e1)), vec3.scale(vy * camSensitivity, e2)));
     
     // Position
-    const camVel = vec3.normalize(listener.moveDirection);
     // cameraPos = cameraPos + camSpeed * (camVel[0] * cameraDir - camVel[1] * e1 + camVel * e2)
+    const camVel = vec3.normalize(listener.moveDirection);
     const v = vec3.add(vec3.add(
       vec3.scale(camVel[0], cameraDir),
       vec3.scale(- camVel[1], e1)),
