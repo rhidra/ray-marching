@@ -16,14 +16,22 @@ export class vec3 {
       return [0, 0, 0];
     }
     
-    return [
-      a[0] / n,
-      a[1] / n,
-      a[2] / n
-    ];
+    return vec3.scale(a, 1/n);
   }
 
   static norm(a: Vector3): number {
-    return Math.sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
+    return Math.sqrt(vec3.dot(a, a));
+  }
+
+  static add(a: Vector3, b: Vector3): Vector3 {
+    return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+  }
+
+  static scale(a: Vector3, s: number): Vector3 {
+    return [a[0] * s, a[1] * s, a[2] * s];
+  }
+
+  static dot(a: Vector3, b: Vector3): number {
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
   }
 }
