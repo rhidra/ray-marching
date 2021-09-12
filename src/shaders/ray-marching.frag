@@ -81,7 +81,7 @@ void main() {
   vec3 ro = cameraPosition - cameraDirection * 1.;
   vec3 e1 = normalize(cross(cameraDirection, vec3(0., 0., 1.)));
   vec3 e2 = cross(cameraDirection, e1);
-  vec3 rd = uv.x * e1 - uv.y * e2 - ro;
+  vec3 rd = uv.x * e1 - uv.y * e2 - ro + cameraPosition;
   
   // Initial raymarching
   float d = rayMarching(ro, rd);

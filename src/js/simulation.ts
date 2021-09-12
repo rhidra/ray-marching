@@ -1,6 +1,6 @@
 import * as twgl from 'twgl.js';
-import { crossProduct, norm, normalize } from '../utils/math';
-import { Vector3 } from '../utils/type';
+import { vec3 } from '../utils/vec3';
+import { Vector2, Vector3 } from '../utils/type';
 import { Controller, Quality, RenderType } from './controls';
 import { MouseListener } from './events';
 import { createTexture, createSolidTexture } from './texture';
@@ -42,21 +42,12 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   // Init camera position and direction
   let cameraPos: Vector3 = [0, 0, 0];
   let cameraDir: Vector3 = [1, 0, 0];
+
+  let velMouse: Vector2 = [0, 0];
   
   // Update the camera direction when moving the cursor
   listener.onMouseMove((point, dir) => {
-    const [vx, vy] = [dir[0], dir[1]];
-    // vector = 0*Rd + vx*e1 + vy*e2
-    const e1 = normalize(crossProduct(cameraDir, [0, 0, 1]));
-    const e2 = crossProduct(cameraDir, e1);
-
-    // cameraDir = cameraDir + k * (vx * e1 + vy * e2)
-    const k = 1; // Camera sensibility
-    cameraDir = normalize([
-      cameraDir[0] + k * (vx * e1[0] + vy * e2[0]),
-      cameraDir[1] + k * (vx * e1[1] + vy * e2[1]),
-      cameraDir[2] + k * (vx * e1[2] + vy * e2[2]),
-    ]);
+    velMouse = dir;
   });
 
   let lastTime = Date.now() / 1000;
@@ -66,6 +57,28 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     const now = time / 1000;
     const dt = (now - lastTime) * 1;
     lastTime = now;
+
+    // Camera position computation
+    const camSpeed = 1;
+    const camSensitivity = 1;
+    const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
+    const e2 = vec3.cross(cameraDir, e1);
+    
+    // Direction
+    const [vx, vy] = velMouse;
+    cameraDir = vec3.normalize([
+      cameraDir[0] + camSensitivity * (vx * e1[0] + vy * e2[0]),
+      cameraDir[1] + camSensitivity * (vx * e1[1] + vy * e2[1]),
+      cameraDir[2] + camSensitivity * (vx * e1[2] + vy * e2[2]),
+    ]);
+    
+    // Position
+    const camVel = vec3.normalize(listener.moveDirection);
+    cameraPos = [
+      cameraPos[0] + camSpeed * (camVel[0] * cameraDir[0] - camVel[1] * e1[0] + camVel[2] * e2[0]),
+      cameraPos[1] + camSpeed * (camVel[0] * cameraDir[1] - camVel[1] * e1[1] + camVel[2] * e2[1]),
+      cameraPos[2] + camSpeed * (camVel[0] * cameraDir[2] - camVel[1] * e1[2] + camVel[2] * e2[2])
+    ];
 
     // Resize canvas and textures
     if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {

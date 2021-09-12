@@ -1,12 +1,13 @@
-import {Vector2} from '../utils/type';
+import {Vector2, Vector3} from '../utils/type';
 
 export class MouseListener {
   prevDir: Vector2 | null = null;
   isLocked = false;
+  moveDirection: Vector3 = [0, 0, 0];
   canvas;
 
-  mouseDragCb: (point: Vector2, force: Vector2) => void;
   mouseMoveCb: (point: Vector2, force: Vector2) => void;
+  cameraMoveCb: (direction: Vector3) => void;
   dragStopCb: () => void;
 
   constructor() {
@@ -27,6 +28,10 @@ export class MouseListener {
     // Configure event listeners for mouse movements
     document.addEventListener("mousemove", e => this.handleMouseMove(e), false);
     document.addEventListener("touchmove", e => this.handleMouseMove(e as any), false);
+
+    // Keyboard event listener
+    document.addEventListener("keydown", e => this.handleKeyboardDown(e), false);
+    document.addEventListener("keyup", e => this.handleKeyboardUp(e), false);
   }
 
   handleLockChange() {
@@ -43,14 +48,63 @@ export class MouseListener {
     }
 
     const k = 500;
-    const dx = e.movementX / k;
-    const dy = e.movementY / k;
+    let dx = e.movementX / k;
+    let dy = e.movementY / k;
+
+    if (e.movementX === -1 && e.movementY === -1) {
+      dx = 0;
+      dy = 0;
+    }
 
     this.mouseMoveCb(undefined, [dx, dy]);
   }
 
+  handleKeyboardDown(e: KeyboardEvent) {
+    switch (e.key) {
+      case 'z':
+        this.moveDirection[0] = 1;
+        break;
+      case 's':
+        this.moveDirection[0] = -1;
+        break;
+      case 'q':
+        this.moveDirection[1] = 1;
+        break;
+      case 'd':
+        this.moveDirection[1] = -1;
+        break;
+      case 'a':
+        this.moveDirection[2] = 1;
+        break;
+      case 'e':
+        this.moveDirection[2] = -1;
+        break;
+    }
+  }
+
+  handleKeyboardUp(e: KeyboardEvent) {
+    switch (e.key) {
+      case 'z':
+      case 's':
+        this.moveDirection[0] = 0;
+        break;
+      case 'q':
+      case 'd':
+        this.moveDirection[1] = 0;
+        break;
+      case 'a':
+      case 'e':
+        this.moveDirection[2] = 0;
+        break;
+    }
+  }
+
   onMouseMove(fn: (point: Vector2, force: Vector2) => void) {
     this.mouseMoveCb = fn;
+  }
+
+  onCameraMove(fn: (direction: Vector3) => void) {
+    this.cameraMoveCb = fn;
   }
 }
 
