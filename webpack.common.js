@@ -27,8 +27,8 @@ module.exports = {
         use: {
           loader: 'webpack-glsl-minify',
           options: {
-            preserveAll: false,
-            disableMangle: false,
+            preserveAll: true,
+            disableMangle: true,
           }
         },
       },
