@@ -8,7 +8,8 @@ uniform float time;
 uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
-@include "./functions.frag"
+@include "./utils/math.frag"
+@include "./utils/sdf.frag"
 @include "./scenes/menger.frag"
 @include "./ray-marching.frag"
 @include "./light.frag"
@@ -36,10 +37,10 @@ void main() {
   vec3 col = lighting(p, diffCol);
 
   // Fog
-  col = applyFog(col, d);
+  col = applyFog(col, d*2.);
 
   // Gamma correction
-  col = pow(col, vec3(0.4545));
+  // col = pow(col, vec3(0.4545));
   
   // col = vec3(d/100.);
 	gl_FragColor = vec4(col, 1.);
