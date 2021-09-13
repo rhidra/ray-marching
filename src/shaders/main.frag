@@ -36,7 +36,11 @@ void main() {
   vec3 col = lighting(p, diffCol);
 
   // Fog
-  col *= exp(-d*.01);
+  col = applyFog(col, d);
+
+  // Gamma correction
+  col = pow(col, vec3(0.4545));
   
+  // col = vec3(d/100.);
 	gl_FragColor = vec4(col, 1.);
 }

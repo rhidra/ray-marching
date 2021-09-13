@@ -58,7 +58,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     lastTime = now;
 
     // Camera position computation
-    const camSpeed = .1;
+    const camSpeed = .2;
     const camSensitivity = 1;
     const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
     const e2 = vec3.cross(cameraDir, e1);

@@ -1,5 +1,10 @@
 
 vec4 getDist(vec3 p) {
+  p -= 5.;
+  p = fract(-abs(p)/10.)*10.;
+
+  // float d = rectSDF(p, vec3(1.));
+
   p *= .5;
   float d = rectSDF(p,vec3(1.0));
 
@@ -13,5 +18,7 @@ vec4 getDist(vec3 p) {
     d = max(d, c);
   }
 
-  return vec4(1., 0., 0., min(d, planeSDF(p/.5, -2.)));
+  float dPlane = 1000000.;//planeSDF(p/.5, -2.1);
+
+  return dPlane < d ? vec4(1., 1., 1., dPlane) : vec4(.24, .24, .79, d);
 }
