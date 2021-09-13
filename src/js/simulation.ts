@@ -39,7 +39,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
   // Init camera position and direction
-  let cameraPos: Vector3 = [0, 0, 0];
+  let cameraPos: Vector3 = [-3, 0, 0];
   let cameraDir: Vector3 = [1, 0, 0];
 
   let velMouse: Vector2 = [0, 0];

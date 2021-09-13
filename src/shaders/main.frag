@@ -9,8 +9,10 @@ uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
 @include "./functions.frag"
+@include "./scenes/menger.frag"
 @include "./ray-marching.frag"
 @include "./light.frag"
+@include "./scenes/menger-light.frag"
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -19,18 +21,19 @@ void main() {
   
   // Center of screen = cameraPosition
   // ro = Eye
-  vec3 ro = cameraPosition - cameraDirection * 1.;
+  vec3 ro = cameraPosition - cameraDirection * .9;
   vec3 e1 = normalize(cross(cameraDirection, vec3(0., 0., 1.)));
   vec3 e2 = cross(cameraDirection, e1);
   vec3 rd = uv.x * e1 - uv.y * e2 - ro + cameraPosition;
   
   // Initial raymarching
-  float d = rayMarching(ro, rd);
+  vec4 hit = rayMarching(ro, rd);
+  float d = hit.w;
+  vec3 diffCol = hit.rgb;
   vec3 p = ro + rd * d;
   
   // Lighting + shadow
-  // float l = lighting(p, vec3(40.*abs(cos(time*.5)), 0., 1.));
-  vec3 col = lighting(p, vec3(1., 0., 1.), vec3(1., 1., 1.) * 1.);
+  vec3 col = lighting(p, diffCol);
 
   // Fog
   col *= exp(-d*.01);

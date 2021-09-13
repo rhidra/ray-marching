@@ -1,32 +1,32 @@
 vec3 getNormal(vec3 p) {
-  float d = getDist(p);
+  float d = getDist(p).w;
   vec2 e = vec2(.001, 0.);
   
-  vec3 n = d - vec3(getDist(p-e.xyy), getDist(p-e.yxy), getDist(p-e.yyx));
+  vec3 n = d - vec3(getDist(p-e.xyy).w, getDist(p-e.yxy).w, getDist(p-e.yyx).w);
   return normalize(n);
 }
 
-vec3 lighting(vec3 p, vec3 light, vec3 lightColor) {
-  vec3 lightVec = normalize(light - p);
+vec3 getLight(vec3 p, vec3 objectColor, vec3 lightPos, vec3 diffColor, vec3 specColor) {
+  vec3 lightVec = normalize(lightPos - p);
   vec3 normal = getNormal(p);
 
   // Ambient light
-  vec3 ambient = lightColor * .3;
+  vec3 ambient = vec3(1., 1., 1.) * .3;
 
   // Diffuse light
-  vec3 diffuse = lightColor * max(dot(lightVec, normal), 0.);
+  vec3 diffuse = diffColor * max(dot(lightVec, normal), 0.);
 
   // Specular light
   vec3 viewDir = normalize(cameraPosition - p);
   vec3 reflectedDir = reflect(-lightVec, normal);
-  float spec = pow(max(dot(viewDir, reflectedDir), 0.), 128.);
-  vec3 specular = spec * lightColor * .5;
+  float spec = pow(max(dot(viewDir, reflectedDir), 0.), 32.);
+  vec3 specular = spec * specColor * .8;
   
   // Shadows
-  float d = rayMarching(p + lightVec*SURFACE_DIST*2., lightVec);
-  float shadows = min(1., .1 + step(length(p - light), d));
+  vec4 ds = rayMarching(p + lightVec*SURFACE_DIST*2., lightVec);
+  float d = ds.w;
+  float shadows = min(1., .1 + step(length(p - lightPos), d));
   shadows = 1.;
 
-  vec3 color = vec3(52., 52., 173.) / 220.;
-  return color * shadows * (diffuse + ambient + specular);
+  return objectColor * shadows * (diffuse + ambient + specular);
 }
