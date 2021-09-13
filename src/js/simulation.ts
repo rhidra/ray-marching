@@ -1,13 +1,12 @@
 import * as twgl from 'twgl.js';
 import { vec3 } from '../utils/vec3';
 import { Vector2, Vector3 } from '../utils/type';
-import { Controller, Quality, RenderType } from './controls';
+import { Controller, Quality } from './controls';
 import { MouseListener } from './events';
-import { createTexture, createSolidTexture } from './texture';
 
 // Load shaders
 const vert = require('../shaders/shader.vert');
-const frag = require('../shaders/ray-marching.frag');
+const frag = require('../shaders/main.frag');
 
 const RESOLUTION_FACTOR_HIGH = 1;
 const RESOLUTION_FACTOR_MEDIUM = 1.4;
@@ -59,7 +58,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     lastTime = now;
 
     // Camera position computation
-    const camSpeed = 1;
+    const camSpeed = .1;
     const camSensitivity = 1;
     const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
     const e2 = vec3.cross(cameraDir, e1);
