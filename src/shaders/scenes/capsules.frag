@@ -1,3 +1,6 @@
+#define MAX_STEPS 2000
+#define SURFACE_DIST .001
+#define MAX_DIST 100.
 
 vec4 getDist(vec3 p) {
   // float a = distSphere(p, vec3(3., 0., 0.), .5);

@@ -1,6 +1,10 @@
 #define ITERATIONS 5
 #define BAILOUT 10.
 
+#define MAX_STEPS 2000
+#define SURFACE_DIST .001
+#define MAX_DIST 100.
+
 vec4 getDist(vec3 p) {
   p *= .08;
 	vec3 z = p;

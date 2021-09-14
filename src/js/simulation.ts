@@ -20,7 +20,7 @@ function resolutionFactor(quality: Quality) {
   }[quality];
 }
 
-const quality = Quality.MEDIUM;
+const quality = Quality.LOW;
 
 export function initSimulation(listener: MouseListener, controller: Controller) {
   // WebGL init
@@ -43,7 +43,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
   // Init camera position and direction
-  let cameraPos: Vector3 = [-20, 0, 0];
+  let cameraPos: Vector3 = [0, 0, 50];
   let cameraDir: Vector3 = [1, 0, 0];
 
   let velMouse: Vector2 = [0, 0];
@@ -62,7 +62,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     lastTime = now;
 
     // Camera position computation
-    const camSpeed = .4;
+    const camSpeed = .8;
     const camSensitivity = 1;
     const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
     const e2 = vec3.cross(cameraDir, e1);

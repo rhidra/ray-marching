@@ -28,7 +28,7 @@ void main() {
   vec3 rd = uv.x * e1 - uv.y * e2 - ro + cameraPosition;
   
   // Initial raymarching
-  vec4 hit = rayMarching(ro, rd);
+  vec4 hit = rayMarchingTerrain(ro, rd);
   float d = hit.w;
   vec3 diffCol = hit.rgb;
   vec3 p = ro + rd * d;
@@ -42,6 +42,6 @@ void main() {
   // Gamma correction
   // col = pow(col, vec3(0.4545));
   
-  // col = vec3(d/100.);
+  // col = vec3(diffCol);
 	gl_FragColor = vec4(col, 1.);
 }
