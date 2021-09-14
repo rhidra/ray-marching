@@ -68,19 +68,16 @@ float noise (in vec2 uv) {
             (d - b) * u.x * u.y;
 }
 
-// From the Book of shaders
-#define OCTAVES 4
-float fbm (in vec2 st) {
-    // Initial values
-    float value = 0.0;
-    float amplitude = .5;
-    float frequency = 0.;
-    //
-    // Loop of octaves
-    for (int i = 0; i < OCTAVES; i++) {
-        value += amplitude * noise(st);
-        st *= 2.;
-        amplitude *= .5;
-    }
-    return value;
+float snoise(vec2 p){
+  const float K1 = 0.366025404; // (sqrt(3)-1)/2;
+  const float K2 = 0.211324865; // (3-sqrt(3))/6;
+	vec2  i = floor( p + (p.x+p.y)*K1 );
+  vec2  a = p - i + (i.x+i.y)*K2;
+  float m = step(a.y,a.x); 
+  vec2  o = vec2(m,1.0-m);
+  vec2  b = a - o + K2;
+	vec2  c = a - 1.0 + 2.0*K2;
+  vec3  h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );
+	vec3  n = h*h*h*h*vec3( dot(a,vec2(random(i+0.0))), dot(b,vec2(random(i+o))), dot(c,vec2(random(i+1.))));
+  return dot( n, vec3(70.0) );
 }

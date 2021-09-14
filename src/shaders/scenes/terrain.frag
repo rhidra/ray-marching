@@ -1,16 +1,34 @@
 #define MAX_STEPS 2000
 #define SURFACE_DIST .01
-#define MAX_DIST 100.
+#define MAX_DIST 1000.
 
 #define MIN_HEIGHT 0.
 #define MAX_HEIGHT 100.
+#define OCTAVES 4
 
 vec4 getDist(vec3 p) {
-  float h = fbm(p.xy * .1);
-  h *= MAX_HEIGHT;
+  vec2 st = p.xy * .1 + 100.;
+
+  float value = 0.0;
+  float amplitude = .5;
+  float frequency = 0.;
+
+  value += 6. * noise(st * .1);
+  value += 2.5 * noise(st * .15 + 5.);
+  value += .75 * noise(st * .2 - 10.);
+  value += .375 * noise(st * .4 + 30.);
+  value += .1875 * noise(st * .8);
+  value += .09375 * noise(st * 1.6);
+
+  value /= 6. + 2.5 + .75 + .375 + .1875 + .09375;// + .3 + .2 + .125;
+
+  value = pow(value, 1.4);
+
+  value *= MAX_HEIGHT;
   
-  return vec4(vec3(1.), h);
+  return vec4(vec3(1.), value);
 }
+
 
 vec4 rayMarchingTerrain(vec3 ro, vec3 rd) {
   float dt = .01, t = .01;

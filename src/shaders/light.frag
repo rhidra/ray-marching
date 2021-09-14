@@ -17,7 +17,8 @@ vec3 getNormalTerrain(vec3 p) {
 
 vec3 applyFog(vec3 col, float d) {
   vec3 fogColor = vec3(0.30, 0.36, 0.60)*1.7;
-  float fogAmount = 1. - clamp(exp(-(d-40.) * (1.0/10.)) * 2., 0., 1.);
+  // float fogAmount = 1. - clamp(exp(-(d-40.) * (1.0/10.)) * 2., 0., 1.);
+  float fogAmount = 1. - clamp(exp(-(d-280.) * (1.0/10.)) * 2., 0., 1.);
   return mix(col, fogColor, fogAmount);
 }
 
