@@ -10,10 +10,10 @@ uniform vec3 cameraDirection;
 
 @include "./utils/math.frag"
 @include "./utils/sdf.frag"
-@include "./scenes/menger.frag"
+@include "./scenes/mandelbulb.frag"
 @include "./ray-marching.frag"
 @include "./light.frag"
-@include "./scenes/menger-light.frag"
+@include "./scenes/mandelbulb-light.frag"
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -37,7 +37,7 @@ void main() {
   vec3 col = lighting(p, diffCol);
 
   // Fog
-  col = applyFog(col, d*2.);
+  col = applyFog(col, d);
 
   // Gamma correction
   // col = pow(col, vec3(0.4545));

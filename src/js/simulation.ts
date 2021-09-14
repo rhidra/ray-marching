@@ -39,7 +39,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
   // Init camera position and direction
-  let cameraPos: Vector3 = [-10, 0, 0];
+  let cameraPos: Vector3 = [-20, 0, 0];
   let cameraDir: Vector3 = [1, 0, 0];
 
   let velMouse: Vector2 = [0, 0];
@@ -58,7 +58,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     lastTime = now;
 
     // Camera position computation
-    const camSpeed = .4;
+    const camSpeed = .2;
     const camSensitivity = 1;
     const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
     const e2 = vec3.cross(cameraDir, e1);
