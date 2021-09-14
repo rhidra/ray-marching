@@ -20,7 +20,7 @@ function resolutionFactor(quality: Quality) {
   }[quality];
 }
 
-const quality = Quality.LOW;
+const quality = Quality.MEDIUM;
 
 export function initSimulation(listener: MouseListener, controller: Controller) {
   // WebGL init

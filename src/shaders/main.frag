@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 resolution;
@@ -10,10 +10,10 @@ uniform vec3 cameraDirection;
 
 @include "./utils/math.frag"
 @include "./utils/sdf.frag"
-@include "./scenes/mandelbulb.frag"
+@include "./scenes/terrain.frag"
 @include "./ray-marching.frag"
 @include "./light.frag"
-@include "./scenes/mandelbulb-light.frag"
+@include "./scenes/terrain-light.frag"
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
