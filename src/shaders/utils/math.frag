@@ -70,7 +70,7 @@ float noise (in vec2 uv) {
 
 // From the Book of shaders
 #define OCTAVES 4
-float fbm (in vec2 uv) {
+float fbm (in vec2 st) {
     // Initial values
     float value = 0.0;
     float amplitude = .5;
@@ -78,7 +78,7 @@ float fbm (in vec2 uv) {
     //
     // Loop of octaves
     for (int i = 0; i < OCTAVES; i++) {
-        value += amplitude * noise(uv);
+        value += amplitude * noise(st);
         st *= 2.;
         amplitude *= .5;
     }
