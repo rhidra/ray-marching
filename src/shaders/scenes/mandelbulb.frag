@@ -8,6 +8,7 @@ vec4 getDist(vec3 p) {
 	float r = 0.0;
 
   float power = 8.;
+  power = 2. + cos(time*.03)*8.;
 
 	for (int i = 0; i < ITERATIONS; ++i) {
 		r = length(z);

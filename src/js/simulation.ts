@@ -10,20 +10,24 @@ const frag = require('../shaders/main.frag');
 
 const RESOLUTION_FACTOR_HIGH = 1;
 const RESOLUTION_FACTOR_MEDIUM = 1.4;
-const RESOLUTION_FACTOR_LOW = 3;
+const RESOLUTION_FACTOR_LOW = 2;
 
-function resolutionFactor(controller: Controller) {
+function resolutionFactor(quality: Quality) {
   return {
     [Quality.LOW]: RESOLUTION_FACTOR_LOW,
     [Quality.MEDIUM]: RESOLUTION_FACTOR_MEDIUM,
     [Quality.HIGH]: RESOLUTION_FACTOR_HIGH,
-  }[controller.quality];
+  }[quality];
 }
+
+const quality = Quality.LOW;
 
 export function initSimulation(listener: MouseListener, controller: Controller) {
   // WebGL init
   const gl = document.querySelector<HTMLCanvasElement>("#c").getContext("webgl");
   twgl.resizeCanvasToDisplaySize(gl.canvas as any);
+  gl.canvas.width /= resolutionFactor(quality);
+  gl.canvas.height /= resolutionFactor(quality);
 
   if (!gl.getExtension('OES_texture_float')) {
       console.error('no floating point texture support');
@@ -58,7 +62,7 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     lastTime = now;
 
     // Camera position computation
-    const camSpeed = .2;
+    const camSpeed = .4;
     const camSensitivity = 1;
     const e1 = vec3.normalize(vec3.cross(cameraDir, [0, 0, 1]));
     const e2 = vec3.cross(cameraDir, e1);
@@ -81,6 +85,8 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     // Resize canvas and textures
     if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {
       console.log('resizing');
+      gl.canvas.width /= resolutionFactor(quality);
+      gl.canvas.height /= resolutionFactor(quality);    
     }
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     

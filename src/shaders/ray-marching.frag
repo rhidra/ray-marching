@@ -1,6 +1,6 @@
-#define MAX_STEPS 800
-#define SURFACE_DIST .005
-#define MAX_DIST 120.
+#define MAX_STEPS 2000
+#define SURFACE_DIST .001
+#define MAX_DIST 100.
 
 vec4 rayMarching(vec3 ro, vec3 rd) {
   float d0 = 0.;
