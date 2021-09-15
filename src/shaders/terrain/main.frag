@@ -9,6 +9,7 @@ uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
 @include "../utils/math.frag"
+@include "../utils/random.frag"
 @include "./light.frag"
 @include "./terrain.frag"
 

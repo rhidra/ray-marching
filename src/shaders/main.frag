@@ -9,6 +9,7 @@ uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
 @include "./utils/math.frag"
+@include "./utils/random.frag"
 @include "./utils/sdf.frag"
 @include "./scenes/menger.frag"
 @include "./ray-marching.frag"
