@@ -1,6 +1,6 @@
 #define MAX_STEPS 500
 #define SURFACE_DIST .5
-#define MAX_DIST 500.
+#define MAX_DIST 2000.
 
 #define MIN_HEIGHT 0.
 #define MAX_HEIGHT 150.
