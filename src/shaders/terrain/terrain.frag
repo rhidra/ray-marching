@@ -1,5 +1,5 @@
 #define MAX_STEPS 500
-#define SURFACE_DIST .5
+#define SURFACE_DIST .2
 #define MAX_DIST 2000.
 
 #define MIN_HEIGHT 0.
@@ -32,16 +32,12 @@ vec3 getHeightmap(vec3 p) {
 
 vec3 getNormal(vec3 p, float d) {
   vec2 e = vec2(.001, 0.);
-  
   vec3 n = vec3(getHeightmap(p-e.xyy).x - getHeightmap(p+e.xyy).x, getHeightmap(p-e.yxy).x - getHeightmap(p+e.yxy).x, 2.*e.x);
-
   return normalize(n);
 }
 
 float rayMarching(vec3 ro, vec3 rd, out float dist, out vec3 normal, out vec3 color) {
   float dt = 2.1, t = 1.1;
-  // float lastH = 0., lastZ = 0.;
-  float waterDepth = 0.;
 
   if (ro.z > MAX_HEIGHT && rd.z >= 0.) {
     return -1.;
@@ -65,17 +61,13 @@ float rayMarching(vec3 ro, vec3 rd, out float dist, out vec3 normal, out vec3 co
       dist = t;
       normal = normalize(cross(normalize(vec3(1., 0., height.y)), normalize(vec3(0., 1., height.z))));
 
+      float waterDepth = max(0., (WATER_LEVEL - p.z)) / dot(rd, vec3(0., 0., -1.));
       color = mountainsShading(p, normal);
       color = waterShading(color, waterDepth);
       return 1.;
     } else if (p.z <= h) {
       t -= dt;
       dt /= 10.;
-    }
-
-    // Water
-    if (p.z < WATER_LEVEL) {
-      waterDepth += dt;
     }
 
     if (t > MAX_DIST) {

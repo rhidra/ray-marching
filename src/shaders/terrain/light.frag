@@ -65,7 +65,7 @@ vec3 mountainsShading(vec3 p, vec3 normal) {
 
 vec3 waterShading(vec3 originalColor, float depth) {
   vec3 surfaceColor = vec3(9, 87, 171)/180.;
-  vec3 depthColor = vec3(20, 43, 74)/255.;
+  vec3 depthColor = vec3(20, 43, 74)/230.;
   float density = .02;
 
   float opticalDepth = 1. - exp(-depth * .03);
