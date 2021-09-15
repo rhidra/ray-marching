@@ -63,3 +63,15 @@ vec3 mountainsShading(vec3 p, vec3 normal) {
   return col;
 }
 
+vec3 waterShading(vec3 originalColor, float depth) {
+  vec3 surfaceColor = vec3(9, 87, 171)/180.;
+  vec3 depthColor = vec3(20, 43, 74)/255.;
+  float density = .02;
+
+  float opticalDepth = 1. - exp(-depth * .03);
+  vec3 waterColor = mix(surfaceColor, depthColor, opticalDepth);
+
+  float k = 1. - exp(-depth * .08);
+
+  return mix(originalColor, waterColor, k);
+}

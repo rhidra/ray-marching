@@ -39,10 +39,9 @@ vec3 getNormal(vec3 p, float d) {
 }
 
 float rayMarching(vec3 ro, vec3 rd, out float dist, out vec3 normal, out vec3 color) {
-  float dt = 2.1, t = 1.01;
+  float dt = 2.1, t = 1.1;
   // float lastH = 0., lastZ = 0.;
-  float waterDensity = .02, waterReduction = 1.;
-  vec3 waterColor = vec3(9, 87, 171)/255.;
+  float waterDepth = 0.;
 
   if (ro.z > MAX_HEIGHT && rd.z >= 0.) {
     return -1.;
@@ -67,18 +66,16 @@ float rayMarching(vec3 ro, vec3 rd, out float dist, out vec3 normal, out vec3 co
       normal = normalize(cross(normalize(vec3(1., 0., height.y)), normalize(vec3(0., 1., height.z))));
 
       color = mountainsShading(p, normal);
-
-      color = mix(waterColor, color, waterReduction);
-
+      color = waterShading(color, waterDepth);
       return 1.;
     } else if (p.z <= h) {
       t -= dt;
-      dt /= 5.;
+      dt /= 10.;
     }
 
     // Water
     if (p.z < WATER_LEVEL) {
-      waterReduction -= waterDensity * dt;
+      waterDepth += dt;
     }
 
     if (t > MAX_DIST) {
