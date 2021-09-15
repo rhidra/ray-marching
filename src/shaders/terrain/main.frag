@@ -40,8 +40,6 @@ void main() {
   }
   
 
-  // col = abs(normal);
-
   // Fog
   col = applyFog(col, d);
   // col *= 1. - step(MAX_DIST, d);
@@ -49,7 +47,6 @@ void main() {
   // Gamma correction
   // col = pow(col, vec3(0.4545));
   
-  // col = vec3(diffCol);
 	gl_FragColor = vec4(col, 1.);
 
   // vec3 n = getHeightmap(vec3(uv.xy*400., 0.));
