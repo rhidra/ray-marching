@@ -85,7 +85,6 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
 
     // Resize canvas and textures
     if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {
-      console.log('resizing');
       gl.canvas.width /= resolutionFactor(quality);
       gl.canvas.height /= resolutionFactor(quality);    
     }

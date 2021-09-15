@@ -6,7 +6,7 @@ vec3 applyFog(vec3 col, float d) {
 
 // Soft shadows function for the terrain generation
 // float softShadowsMarching(vec3 ro, vec3 rd, float k) {
-//   float dt = .01, t = .01, res = 1.;
+//   float dt = 2., t = .01, res = 1.;
 
 //   if (ro.z > MAX_HEIGHT) return 1.; 
 
@@ -14,7 +14,7 @@ vec3 applyFog(vec3 col, float d) {
 //     vec3 p = ro + rd * t;
 //     if (p.z > MAX_HEIGHT) return res;
 
-//     float h = getDist(p).x;
+//     float h = getHeightmap(p).x;
 //     res = min(res, k*(p.z - h)/t);
 
 //     if (h >= p.z) return 0.;
@@ -28,7 +28,9 @@ vec3 applyFog(vec3 col, float d) {
 // }
 
 vec3 getLight(vec3 p, vec3 normal, vec3 objectColor, vec3 lightPos, vec3 diffColor, vec3 specColor) {
-  vec3 lightVec = normalize(lightPos - p);
+  // vec3 lightVec = normalize(lightPos - p);
+  // Sun light
+  vec3 lightVec = normalize(vec3(1., 1., 1.));
 
   // Ambient light
   vec3 ambient = vec3(1., 1., 1.) * .2;

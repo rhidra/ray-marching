@@ -28,10 +28,6 @@ void main() {
   float d;
   vec3 normal;
   float hit = rayMarching(ro, rd, d, normal);
-  // normal = cross(normal, cross(normal, vec3(0., 0., 1.)));
-  // normal = abs(normal);
-  normal = normalize(cross(normalize(vec3(1., 0., normal.x)), normalize(vec3(0., 1., normal.y))));
-  // normal = abs(normal);
   vec3 p = ro + rd * d;
 
   vec3 skyColor = vec3(0.30, 0.36, 0.60)*1.7;
@@ -44,6 +40,8 @@ void main() {
   // Lighting + shadow
   vec3 col = lighting(p, normal);
 
+  // col = abs(normal);
+
   // Fog
   col = applyFog(col, d);
   // col *= 1. - step(MAX_DIST, d);
@@ -54,6 +52,8 @@ void main() {
   // col = vec3(diffCol);
 	gl_FragColor = vec4(col, 1.);
 
-  // float n = getHeightmap(vec3(uv.xy*400., 0.)).x / 100.;
-  // gl_FragColor = vec4(vec3(n), 1.);
+  // vec3 n = getHeightmap(vec3(uv.xy*400., 0.));
+
+  // col = mix(vec3(abs(n.yz), 0.), vec3(n.x/100.), abs(cos(time*.8)));
+  // gl_FragColor = vec4(col, 1.);
 }
