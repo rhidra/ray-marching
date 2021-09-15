@@ -8,12 +8,9 @@ uniform float time;
 uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
-@include "./utils/math.frag"
-@include "./utils/sdf.frag"
-@include "./scenes/menger.frag"
-@include "./ray-marching.frag"
+@include "../utils/math.frag"
+@include "./terrain.frag"
 @include "./light.frag"
-@include "./scenes/menger-light.frag"
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -28,13 +25,24 @@ void main() {
   vec3 rd = uv.x * e1 - uv.y * e2 - ro + cameraPosition;
   
   // Initial raymarching
-  vec4 hit = rayMarching(ro, rd);
-  float d = hit.w;
-  vec3 diffCol = hit.rgb;
+  float d;
+  vec3 normal;
+  float hit = rayMarching(ro, rd, d, normal);
+  // normal = cross(normal, cross(normal, vec3(0., 0., 1.)));
+  // normal = abs(normal);
+  normal = normalize(cross(normalize(vec3(1., 0., normal.x)), normalize(vec3(0., 1., normal.y))));
+  // normal = abs(normal);
   vec3 p = ro + rd * d;
+
+  vec3 skyColor = vec3(0.30, 0.36, 0.60)*1.7;
+  
+  if (hit < 0.) {
+    gl_FragColor = vec4(skyColor, 1.);
+    return;
+  }
   
   // Lighting + shadow
-  vec3 col = lighting(p, diffCol);
+  vec3 col = lighting(p, normal);
 
   // Fog
   col = applyFog(col, d);
@@ -46,6 +54,6 @@ void main() {
   // col = vec3(diffCol);
 	gl_FragColor = vec4(col, 1.);
 
-  // float n = getDist(vec3(uv.xy*400., 0.)).w / 100.;
+  // float n = getHeightmap(vec3(uv.xy*400., 0.)).x / 100.;
   // gl_FragColor = vec4(vec3(n), 1.);
 }

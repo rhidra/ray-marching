@@ -6,7 +6,7 @@ import { MouseListener } from './events';
 
 // Load shaders
 const vert = require('../shaders/shader.vert');
-const frag = require('../shaders/main.frag');
+const frag = require('../shaders/terrain/main.frag');
 
 const RESOLUTION_FACTOR_HIGH = 1;
 const RESOLUTION_FACTOR_MEDIUM = 1.4;
@@ -43,8 +43,9 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
   const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
   // Init camera position and direction
-  let cameraPos: Vector3 = [0, 0, 120];
+  let cameraPos: Vector3 = [0, 0, 80];
   let cameraDir: Vector3 = [0.89407102073112, 0.4045389411524194, -0.19231550894322832];
+  // let cameraDir: Vector3 = [1, 0, 0];
 
   let velMouse: Vector2 = [0, 0];
   

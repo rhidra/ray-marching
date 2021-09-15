@@ -46,12 +46,15 @@ vec3 rotateZ(vec3 v, float a) {
 }
 
 // From the Book of shaders
-float random (in vec2 uv) {
+float random(in vec2 uv) {
     return fract(sin(dot(uv.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+float random3(in vec3 uv) {
+    return fract(sin(dot(uv.xyz, vec3(12.9898,78.233,83.897))) * 43758.5453123);
 }
 
 // From the Book of shaders
-float noise (in vec2 uv) {
+float noise(in vec2 uv) {
     vec2 i = floor(uv);
     vec2 f = fract(uv);
 
@@ -66,6 +69,36 @@ float noise (in vec2 uv) {
     return mix(a, b, u.x) +
             (c - a)* u.y * (1.0 - u.x) +
             (d - b) * u.x * u.y;
+}
+
+vec3 noised(in vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+	
+#if 0
+    // quintic interpolation
+    vec2 u = f*f*f*(f*(f*6.0-15.0)+10.0);
+    vec2 du = 30.0*f*f*(f*(f-2.0)+1.0);
+#else
+    // cubic interpolation
+    vec2 u = f*f*(3.0-2.0*f);
+    vec2 du = 6.0*f*(1.0-f);
+#endif    
+    
+    float va = random(i);
+    float vb = random(i + vec2(1.0,0.0));
+    float vc = random(i + vec2(0.0,1.0));
+    float vd = random(i + vec2(1.0,1.0));
+    
+    float k0 = va;
+    float k1 = vb - va;
+    float k2 = vc - va;
+    float k4 = va - vb - vc + vd;
+
+    vec3 res = vec3(va+(vb-va)*u.x+(vc-va)*u.y+(va-vb-vc+vd)*u.x*u.y, // value
+                 du*(u.yx*(va-vb-vc+vd) + vec2(vb,vc) - va));     // derivative  
+    // res.x = res.x*.5 + .5;
+    return res;
 }
 
 float snoise(vec2 p){
