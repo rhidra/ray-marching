@@ -75,7 +75,7 @@ vec3 noised(in vec2 p) {
     vec2 i = floor(p);
     vec2 f = fract(p);
 	
-#if 0
+#if 1
     // quintic interpolation
     vec2 u = f*f*f*(f*(f*6.0-15.0)+10.0);
     vec2 du = 30.0*f*f*(f*(f-2.0)+1.0);

@@ -52,9 +52,11 @@ vec3 getLight(vec3 p, vec3 normal, vec3 objectColor, vec3 lightPos, vec3 diffCol
   return objectColor * shadows * (diffuse + ambient + specular);
 }
 
-vec3 lighting(vec3 p, vec3 normal) {
+vec3 mountainsShading(vec3 p, vec3 normal) {
   float t = dot(normal, vec3(0., 0., 1.));
-  vec3 diffCol = mix(vec3(184, 167, 154)/255., vec3(61, 156, 73)/255., pow(t, 10.));
+  t = pow(t, 15.);
+
+  vec3 diffCol = mix(vec3(184, 167, 154)/255., vec3(61, 156, 73)/255., t);
 
   vec3 col = getLight(p, normal, diffCol, vec3(-4., -4., 100.), vec3(1.) * 1., vec3(1.));
 

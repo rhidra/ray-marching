@@ -9,8 +9,8 @@ uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
 @include "../utils/math.frag"
-@include "./terrain.frag"
 @include "./light.frag"
+@include "./terrain.frag"
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -27,7 +27,8 @@ void main() {
   // Initial raymarching
   float d;
   vec3 normal;
-  float hit = rayMarching(ro, rd, d, normal);
+  vec3 col;
+  float hit = rayMarching(ro, rd, d, normal, col);
   vec3 p = ro + rd * d;
 
   vec3 skyColor = vec3(0.30, 0.36, 0.60)*1.7;
@@ -37,8 +38,6 @@ void main() {
     return;
   }
   
-  // Lighting + shadow
-  vec3 col = lighting(p, normal);
 
   // col = abs(normal);
 
@@ -53,7 +52,8 @@ void main() {
 	gl_FragColor = vec4(col, 1.);
 
   // vec3 n = getHeightmap(vec3(uv.xy*400., 0.));
-
-  // col = mix(vec3(abs(n.yz), 0.), vec3(n.x/100.), abs(cos(time*.8)));
+  // // col = mix(vec3(abs(n.yz), 0.), vec3(n.x/100.), abs(cos(time*.8)));
+  // n.x/=MAX_HEIGHT;
+  // col = vec3(n.x);
   // gl_FragColor = vec4(col, 1.);
 }
