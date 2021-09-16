@@ -62,10 +62,10 @@ float fbm ( in vec2 _st) {
     // Rotate to reduce axial bias
     mat2 rot = mat2(cos(0.5), sin(0.5),
                     -sin(0.5), cos(0.50));
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 2; ++i) {
         v += a * noise(_st);
         _st = rot * _st * 2.0 + shift;
-        a *= 0.5;
+        a *= 0.2;
     }
     return v;
 }

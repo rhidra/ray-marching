@@ -25,7 +25,6 @@
 
 
 #define GRASS vec3(79, 163, 44)/255.
-#define ROCK vec3(125, 90, 62)/255.
 
 vec3 mountainsShading(vec3 p, vec3 normal) {
   float t = dot(normal, vec3(0., 0., 1.));
@@ -56,5 +55,8 @@ vec3 mountainsShading(vec3 p, vec3 normal) {
   float shadows = 1.;
 #endif
 
-  return objectColor * shadows * (diffuse + ambient + specular);
+  vec3 oldShading = objectColor * shadows * (diffuse + ambient + specular);
+
+  vec3 rock = rockShading(p, normal);
+  return mix(rock, oldShading, t);
 }
