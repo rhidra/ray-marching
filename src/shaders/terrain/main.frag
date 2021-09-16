@@ -32,10 +32,8 @@ void main() {
   float hit = rayMarching(ro, rd, d, normal, col);
   vec3 p = ro + rd * d;
 
-  vec3 skyColor = vec3(0.30, 0.36, 0.60)*1.7;
-  
   if (hit < 0.) {
-    gl_FragColor = vec4(skyColor, 1.);
+    gl_FragColor = vec4(SKY_COLOR, 1.);
     return;
   }
   

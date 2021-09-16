@@ -1,7 +1,8 @@
+#define SKY_COLOR vec3(135, 206, 235)/255.
+
 vec3 applyFog(vec3 col, float d) {
-  vec3 fogColor = vec3(0.30, 0.36, 0.60)*1.7;
   float fogAmount = 1. - clamp(exp(-(d-1000.) * (1.0/100.)) * 2., 0., 1.);
-  return mix(col, fogColor, fogAmount);
+  return mix(col, SKY_COLOR, fogAmount);
 }
 
 // Soft shadows function for the terrain generation
@@ -29,11 +30,15 @@ vec3 applyFog(vec3 col, float d) {
 
 const vec3 sunLight = normalize(vec3(1., 1., .6));
 
+#define GRASS vec3(79, 163, 44)/255.
+#define ROCK vec3(125, 90, 62)/255.
+
 vec3 mountainsShading(vec3 p, vec3 normal) {
   float t = dot(normal, vec3(0., 0., 1.));
   t = pow(t, 15.);
+  t = smoothstep(.2, .7, t);
 
-  vec3 objectColor = mix(vec3(184, 167, 154)/255., vec3(61, 156, 73)/255., t);
+  vec3 objectColor = mix(ROCK, GRASS, t);
   vec3 diffuseColor = vec3(1.) * 1.;
   vec3 specColor = vec3(1.) * 1.;
 
