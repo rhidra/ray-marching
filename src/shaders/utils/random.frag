@@ -55,6 +55,21 @@ vec3 noised(in vec2 p) {
     return res;
 }
 
+float fbm ( in vec2 _st) {
+    float v = 0.0;
+    float a = 0.5;
+    vec2 shift = vec2(100.0);
+    // Rotate to reduce axial bias
+    mat2 rot = mat2(cos(0.5), sin(0.5),
+                    -sin(0.5), cos(0.50));
+    for (int i = 0; i < 3; ++i) {
+        v += a * noise(_st);
+        _st = rot * _st * 2.0 + shift;
+        a *= 0.5;
+    }
+    return v;
+}
+
 float snoise(vec2 p){
   const float K1 = 0.366025404; // (sqrt(3)-1)/2;
   const float K2 = 0.211324865; // (3-sqrt(3))/6;

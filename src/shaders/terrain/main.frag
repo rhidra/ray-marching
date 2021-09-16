@@ -8,10 +8,19 @@ uniform float time;
 uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
+const vec3 sunLight = normalize(vec3(1., 1., .6));
+
 @include "../utils/math.frag"
 @include "../utils/random.frag"
+@include "./water.frag"
+@include "./rock.frag"
 @include "./light.frag"
 @include "./terrain.frag"
+
+vec3 applyFog(vec3 col, float d) {
+  float fogAmount = 1. - clamp(exp(-(d-1000.) * (1.0/100.)) * 2., 0., 1.);
+  return mix(col, SKY_COLOR, fogAmount);
+}
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;

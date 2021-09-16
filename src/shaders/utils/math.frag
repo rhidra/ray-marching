@@ -44,3 +44,10 @@ vec3 rotateZ(vec3 v, float a) {
   
   return R * v;
 }
+
+vec2 rotate2D(vec2 v, float a) {
+  mat2 R = mat2(cos(a), -sin(a),
+                sin(a), cos(a));
+  
+  return R * v;
+}
