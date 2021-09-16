@@ -95,7 +95,7 @@ vec3 waterShading(vec3 p, vec3 originalColor, float depth) {
 
   waterColor *= diffuseLighting + specHighlight;
 
-  float alpha = 1. - exp(-depth * .2);
+  float alpha = (1. - exp(-depth * .3) + .1) * step(0.1, depth);
   // alpha = step(.05, depth);
   return mix(originalColor, waterColor, alpha);
 }
