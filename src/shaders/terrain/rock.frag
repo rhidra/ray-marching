@@ -16,6 +16,9 @@ float rockHeight(vec2 uv) {
 }
 
 vec4 rockNormal(vec2 uv, vec3 normal, float dist) {
+  if (dist > 500.) {
+    return vec4(normal, 0.);
+  }
   float h = rockHeight(uv);
   vec2 eps = vec2(.1, 0.);
   vec2 dxy = h - vec2(rockHeight(uv + eps.xy), rockHeight(uv + eps.yx));
@@ -23,7 +26,6 @@ vec4 rockNormal(vec2 uv, vec3 normal, float dist) {
 }
 
 vec3 rockShading(vec3 p, vec3 normal) {
-
   vec3 viewDir = normalize(cameraPosition - p);
   float dist = length(cameraPosition - p);
 
