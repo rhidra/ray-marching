@@ -2,17 +2,19 @@
 #define ROCK_DARK vec3(102, 83, 67)/255.
 
 float rockHeight(vec2 uv) {
-    uv = rotate2D(uv, 0.005*noise(uv*10.*0.436));
-    uv.x *= 3.;
-    uv = uv + vec2(fbm(uv)-20., fbm(uv+10.)+50.);
-    uv = uv + 10.*0.332*vec2(fbm(uv)-40., fbm(uv+10.)+500.);
+  int octaves = 2;
 
-    float n = fbm(uv);
-    // n = pow(n, 2.112);
-    // n = n*.6;
-    // n = n*.1;
+  uv = rotate2D(uv, 0.005*noise(uv*10.*0.436));
+  uv.x *= 3.;
+  uv = uv + vec2(fbm(uv, octaves)-20., fbm(uv+10., octaves)+50.);
+  uv = uv + 10.*0.332*vec2(fbm(uv, octaves)-40., fbm(uv+10., octaves)+500.);
 
-    return n;  
+  float n = fbm(uv, octaves);
+  // n = pow(n, 2.112);
+  // n = n*.6;
+  // n = n*.1;
+
+  return n;  
 }
 
 vec4 rockNormal(vec2 uv, vec3 normal, float dist) {
@@ -29,7 +31,7 @@ vec3 rockShading(vec3 p, vec3 normal) {
   vec3 viewDir = normalize(cameraPosition - p);
   float dist = length(cameraPosition - p);
 
-  // return vec3(rockNormal(p.yx*.2, normal, dist).w);
+  // Add normal map
   vec4 bump = rockNormal(p.yx*.2, normal, dist);
   normal = mix(normal, bump.rgb, .05);
 

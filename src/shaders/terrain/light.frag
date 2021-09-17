@@ -1,4 +1,3 @@
-#define SKY_COLOR vec3(135, 206, 235)/255.
 
 // Soft shadows function for the terrain generation
 // float softShadowsMarching(vec3 ro, vec3 rd, float k) {
@@ -24,7 +23,6 @@
 // }
 
 
-#define GRASS vec3(79, 163, 44)/255.
 
 vec3 mountainsShading(vec3 p, vec3 normal) {
   float t = dot(normal, vec3(0., 0., 1.));
@@ -57,6 +55,7 @@ vec3 mountainsShading(vec3 p, vec3 normal) {
 
   vec3 oldShading = objectColor * shadows * (diffuse + ambient + specular);
 
+  vec3 grass = grassShading(p, normal);
   vec3 rock = rockShading(p, normal);
-  return mix(rock, oldShading, t);
+  return mix(rock, grass, t);
 }

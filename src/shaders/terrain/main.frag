@@ -9,11 +9,13 @@ uniform vec3 cameraPosition;
 uniform vec3 cameraDirection;
 
 const vec3 sunLight = normalize(vec3(1., 1., .6));
+#define SKY_COLOR vec3(135, 206, 235)/255.
 
 @include "../utils/math.frag"
 @include "../utils/random.frag"
 @include "./water.frag"
 @include "./rock.frag"
+@include "./grass.frag"
 @include "./light.frag"
 @include "./terrain.frag"
 
