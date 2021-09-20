@@ -1,11 +1,21 @@
 
-// From the Book of shaders
+float hash12(vec2 p) {
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+float hash13(vec3 p3){
+	p3  = fract(p3 * .1031);
+    p3 += dot(p3, p3.zyx + 31.32);
+    return fract((p3.x + p3.y) * p3.z);
+}
 float random(in vec2 uv) {
-    return fract(sin(dot(uv.xy, vec2(12.9898,78.233))) * 43758.5453123);
+  return hash12(uv);
 }
 float random3(in vec3 uv) {
-    return fract(sin(dot(uv.xyz, vec3(12.9898,78.233,83.897))) * 43758.5453123);
+  return hash13(uv);
 }
+
 
 // From the Book of shaders
 float noise(in vec2 uv) {

@@ -1,13 +1,12 @@
 #define GRASS vec3(79, 163, 44)/255.
+#define GRASS_DARK vec3(38, 79, 21)/255.
 
 float grassHeight(vec2 uv) {
-  float dots = noise(uv*200.);
-  dots = smoothstep(0.720, 0.924, dots);
-  
-  float n = noise(uv*20.);
-  n = dots * pow(n, 2.020);
-
-  return noise(uv);  
+  float n = hash12(uv*2000.);
+  n = step(0.868, n);
+  n = clamp(n+0.496, 0., 1.) * noise(uv*20.);
+  n = pow(n, 0.6);
+  return n;
 }
 
 vec4 grassNormal(vec2 uv, vec3 normal, float dist) {
@@ -26,8 +25,8 @@ vec3 grassShading(vec3 p, vec3 normal) {
 
   // Normal map
   vec4 bump = grassNormal(p.xy*1., normal, dist);
-  return vec3(bump.w);
-  normal = mix(normal, bump.rgb, 1.);
+  // return vec3(bump.w);
+  // normal = mix(normal, bump.rgb, .05);
 
   // Ambient light
   vec3 ambient = vec3(1.) * .2;
@@ -38,7 +37,10 @@ vec3 grassShading(vec3 p, vec3 normal) {
   // Specular light
   vec3 reflectedDir = reflect(-sunLight, normal);
   float spec = pow(max(dot(viewDir, reflectedDir), 0.), 32.);
-  vec3 specular = spec * vec3(1.) * .4;
+  vec3 specular = spec * vec3(1.) *.25* clamp(.3 + bump.w, 0., 1.);
 
-  return GRASS * (diffuse + ambient + specular);
+  // Object color
+  vec3 color = mix(GRASS, GRASS_DARK, 0.);
+
+  return color * (diffuse + ambient + specular);
 }
