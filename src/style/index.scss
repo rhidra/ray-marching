@@ -1,4 +1,5 @@
 @use './navbar.scss';
+@use './mixins.scss' as *;
 
 * {
   font: 1rem 'Fira Sans', sans-serif;
@@ -16,11 +17,29 @@ body {
   position: fixed;
   overflow: hidden;
   margin: 0;
-  background-color: black;
+  background-color: hsl(41deg, 100%, 47%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  background-color: #E0E0E0;
+  padding: .75rem;
+  border-radius: 10px;
+  box-shadow: 5px 8px 15px hsla(0, 0, 0, 0.2), 
+  2px 3px 4px  hsla(0, 0, 0, 0.15);
 }
 
 canvas#c {
   z-index: 1;
-  width: 100%; 
-  height: 100%; 
+  width: 100vw;
+  height: 100vh;
+  max-width: 500px;
+  max-height: 500px;
+
+  @include mobile {
+    max-height: inherit;
+  }
 }

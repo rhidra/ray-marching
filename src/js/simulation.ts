@@ -84,10 +84,10 @@ export function initSimulation(listener: MouseListener, controller: Controller) 
     cameraPos = vec3.add(cameraPos, vec3.scale(camSpeed, v));
 
     // Resize canvas and textures
-    if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {
-      gl.canvas.width /= resolutionFactor(quality);
-      gl.canvas.height /= resolutionFactor(quality);    
-    }
+    // if (twgl.resizeCanvasToDisplaySize(gl.canvas as any)) {
+    //   gl.canvas.width /= resolutionFactor(quality);
+    //   gl.canvas.height /= resolutionFactor(quality);    
+    // }
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     
     const uniforms = {
