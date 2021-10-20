@@ -14,6 +14,7 @@
     "css-loader": "^5.2.6",
     "cname-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^5.3.1",
+    "copy-webpack-plugin": "^9.0.1",
     "mini-css-extract-plugin": "^1.6.0",
     "ts-loader": "^9.2.3",
     "typescript": "^4.3.2",
